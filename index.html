@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Galatea • Hilo Conductor: Catálogo de capacidades para el ciclo de vida de aplicaciones mobile.">
   <title>Galatea • Hilo Conductor de Capacidades Mobile</title>
-  <link rel="stylesheet" href="styles.css?v=3.5">
+  <link rel="stylesheet" href="styles.css?v=3.6">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -72,11 +72,40 @@
     <!-- Hero Section -->
     <section class="hero">
       <div class="hero-content">
-        <p class="hero-kicker">Plataforma de Capacidades Mobile</p>
-        <h1 class="hero-title">El Hilo Conductor.</h1>
+        <div class="hero-badge">
+          <span class="hero-status-beacon" aria-hidden="true"></span>
+          <span class="hero-badge-cat">Galatea Mobile</span>
+          <span class="hero-badge-sep">•</span>
+          <span class="hero-badge-text">Arquitectura & Ecosistema</span>
+        </div>
+
+        <div class="hero-title-lockup">
+          <h1 class="hero-title">
+            <span class="hero-title-text">El Hilo Conductor</span><span class="hero-title-punct">.</span>
+          </h1>
+          <div class="hero-thread-motif" aria-hidden="true">
+            <div class="thread-glow"></div>
+          </div>
+        </div>
+
         <p class="hero-description">
           Aceleradores de arquitectura, experiencia visual, observabilidad y gobierno para que los canales resuelvan necesidades de negocio sin reconstruir capacidades transversales.
         </p>
+
+        <div class="hero-actions">
+          <button class="hero-btn-primary" id="heroBtnCatalog">
+            <span>Explorar Catálogo</span>
+            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+            </svg>
+          </button>
+          <button class="hero-btn-secondary" id="heroBtnMatrix">
+            <span>Ver Matriz de Madurez</span>
+            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2" />
+            </svg>
+          </button>
+        </div>
       </div>
     </section>
 
@@ -284,6 +313,6 @@
     </div>
   </footer>
 
-  <script src="app.js?v=3.5"></script>
+  <script src="app.js?v=3.6"></script>
 </body>
 </html>

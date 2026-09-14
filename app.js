@@ -1040,6 +1040,32 @@ GalateaEmbeddedPay.startPayment({
       });
     });
 
+    // Hero Action Buttons (Catalog & Matrix Fast Jump)
+    const heroBtnCatalog = document.getElementById('heroBtnCatalog');
+    const heroBtnMatrix = document.getElementById('heroBtnMatrix');
+
+    if (heroBtnCatalog) {
+      heroBtnCatalog.addEventListener('click', () => {
+        state.viewMode = 'grid';
+        elements.segmentedBtns.forEach((b) => {
+          b.classList.toggle('active', b.dataset.view === 'grid');
+        });
+        updateUI();
+        document.querySelector('.controls-card')?.scrollIntoView({ behavior: 'smooth' });
+      });
+    }
+
+    if (heroBtnMatrix) {
+      heroBtnMatrix.addEventListener('click', () => {
+        state.viewMode = 'matrix';
+        elements.segmentedBtns.forEach((b) => {
+          b.classList.toggle('active', b.dataset.view === 'matrix');
+        });
+        updateUI();
+        document.querySelector('.controls-card')?.scrollIntoView({ behavior: 'smooth' });
+      });
+    }
+
     // Theme Toggle
     elements.themeToggleBtn.addEventListener('click', () => {
       const current = document.documentElement.getAttribute('data-theme') || 'dark';
