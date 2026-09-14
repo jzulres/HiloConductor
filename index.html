@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Galatea • Hilo Conductor: Catálogo de capacidades para el ciclo de vida de aplicaciones mobile.">
+  <title>Galatea • Hilo Conductor de Capacidades Mobile</title>
+  <link rel="stylesheet" href="styles.css?v=2.5">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Plus Jakarta Sans", "Helvetica Neue", sans-serif;
+    }
+    code, pre {
+      font-family: "SF Mono", "JetBrains Mono", Menlo, Monaco, Consolas, monospace;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- =========================================================================
+       Ambient Background Animation (The "Hilo Conductor" & Fluid Glow)
+       ========================================================================= -->
+  <div class="ambient-background" aria-hidden="true">
+    <div class="ambient-glow ambient-glow-1"></div>
+    <div class="ambient-glow ambient-glow-2"></div>
+    <div class="ambient-glow ambient-glow-3"></div>
+    <div class="ambient-thread-line"></div>
+    <canvas id="ambientCanvas" class="ambient-canvas"></canvas>
+  </div>
+
+  <!-- =========================================================================
+       Header
+       ========================================================================= -->
+  <header class="header">
+    <div class="container header-content">
+      <a href="#" class="brand-wrapper" aria-label="Galatea Inicio">
+        <div class="brand-icon">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+          </svg>
+        </div>
+        <div class="brand-text">
+          <span class="brand-title">Galatea</span>
+          <span class="brand-pill">Mobile</span>
+        </div>
+      </a>
+
+      <div class="header-actions">
+        <div class="header-meta-pill">
+          <strong id="totalCapsCount">20 capacidades</strong>
+          <span>•</span>
+          <span id="activeCapsCount">Todas visibles</span>
+        </div>
+
+        <button id="themeToggleBtn" class="btn-icon" title="Cambiar tema" aria-label="Cambiar tema">
+          <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- =========================================================================
+       Main Content Container
+       ========================================================================= -->
+  <main class="container">
+
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="hero-content">
+        <p class="hero-kicker">Plataforma de Capacidades Mobile</p>
+        <h1 class="hero-title">El Hilo Conductor.</h1>
+        <p class="hero-description">
+          Aceleradores de arquitectura, experiencia visual, observabilidad y gobierno para que los canales resuelvan necesidades de negocio sin reconstruir capacidades transversales.
+        </p>
+      </div>
+    </section>
+
+    <!-- Strategic Priorities -->
+    <section class="priorities-section">
+      <div class="section-eyebrow">
+        <h2 class="section-heading">Foco Estratégico</h2>
+        <span class="section-caption">Prioridades inmediatas de la plataforma</span>
+      </div>
+      <div class="priorities-grid">
+        <!-- Priority 1 -->
+        <div class="priority-card" data-cap-number="9">
+          <div class="priority-badge">Prioridad 1 • Nivel 1</div>
+          <h3 class="priority-title">Experiencias Conversacionales & A2UI</h3>
+          <p class="priority-summary">Capacidades expuestas como funciones invocables por agentes de IA e interfaz reactiva al diálogo.</p>
+          <div class="priority-footer">
+            <span>Developer Experience</span>
+            <span class="priority-link">Ficha →</span>
+          </div>
+        </div>
+
+        <!-- Priority 2 -->
+        <div class="priority-card" data-cap-number="16">
+          <div class="priority-badge">Prioridad 2 • Nivel 1</div>
+          <h3 class="priority-title">IA en Developer Experience & MCP</h3>
+          <p class="priority-summary">Asistentes inteligentes para ingeniería y servidores MCP para migración y validación de estándares.</p>
+          <div class="priority-footer">
+            <span>Productividad TI</span>
+            <span class="priority-link">Ficha →</span>
+          </div>
+        </div>
+
+        <!-- Priority 3 -->
+        <div class="priority-card" data-cap-number="5">
+          <div class="priority-badge">Prioridad 3 • Nivel 2</div>
+          <h3 class="priority-title">Backend Driven UI (BDUI)</h3>
+          <p class="priority-summary">Vistas y componentes renderizados dinámicamente desde backend sin esperar liberaciones en tiendas.</p>
+          <div class="priority-footer">
+            <span>Experiencias Dinámicas</span>
+            <span class="priority-link">Ficha →</span>
+          </div>
+        </div>
+
+        <!-- Priority 4 -->
+        <div class="priority-card" data-cap-number="6">
+          <div class="priority-badge">Prioridad 4 • Nivel 2</div>
+          <h3 class="priority-title">Motor de Flujos & Low Code</h3>
+          <p class="priority-summary">Composición de procesos de negocio y journeys parametrizados reutilizables entre canales.</p>
+          <div class="priority-footer">
+            <span>Journeys Modulares</span>
+            <span class="priority-link">Ficha →</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Lifecycle Rail (El Hilo Conductor) -->
+    <section class="lifecycle-section" aria-label="Ciclo de Vida Mobile">
+      <div class="lifecycle-box">
+        <div class="lifecycle-top">
+          <h2 class="lifecycle-title">Ciclo de Desarrollo Mobile</h2>
+          <span class="lifecycle-subtext">Selecciona una fase para filtrar capacidades que intervienen en ella:</span>
+        </div>
+
+        <div class="stepper-rail" id="stepperTrack">
+          <!-- Populated dynamically via app.js -->
+        </div>
+
+        <div class="stage-filter-toast" id="stepperFeedback" style="display: none;">
+          <div>
+            Filtrando por: <strong id="stepperStageName">Etapa seleccionada</strong>
+          </div>
+          <button class="btn-toast-clear" id="btnClearStage">Mostrar todas las etapas</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Controls Bar -->
+    <section class="controls-card" aria-label="Filtros y Búsqueda">
+      <div class="search-row">
+        <div class="apple-search-field">
+          <svg class="apple-search-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+          <input 
+            type="text" 
+            id="searchInput" 
+            class="apple-input" 
+            placeholder="Buscar por capacidad, servicio, plugin o término..." 
+            aria-label="Buscar capacidades"
+          />
+          <span class="search-key-badge">Ctrl K</span>
+        </div>
+
+        <div class="apple-segmented-group" role="group" aria-label="Modo de Vista">
+          <button class="segmented-btn active" data-view="grid">
+            <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+            </svg>
+            Catálogo
+          </button>
+          <button class="segmented-btn" data-view="matrix">
+            <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2" />
+            </svg>
+            Matriz
+          </button>
+        </div>
+      </div>
+
+      <div class="filter-sections">
+        <!-- Strategic Blocks -->
+        <div class="filter-line">
+          <span class="filter-title">Bloque</span>
+          <div class="filter-chips-wrap" id="blockFilterPills">
+            <!-- Populated via app.js -->
+          </div>
+        </div>
+
+        <!-- Maturity Levels -->
+        <div class="filter-line">
+          <span class="filter-title">Madurez</span>
+          <div class="filter-chips-wrap" id="maturityFilterPills">
+            <!-- Populated via app.js -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Catalog View -->
+    <section class="catalog-section">
+      <div class="catalog-status-bar">
+        <span id="searchCount">Mostrando 20 capacidades</span>
+        <span>Escala: 0 (Idea) a 5 (Escalada)</span>
+      </div>
+
+      <!-- Grid Cards -->
+      <div class="capabilities-grid" id="capabilitiesGrid">
+        <!-- Rendered dynamically via app.js -->
+      </div>
+
+      <!-- Matrix Board -->
+      <div class="matrix-container" id="matrixContainer">
+        <div class="matrix-grid" id="matrixGrid">
+          <!-- Rendered dynamically via app.js -->
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- =========================================================================
+       Apple Sheet Modal
+       ========================================================================= -->
+  <div class="apple-modal-scrim" id="detailModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="apple-modal-window" id="modalDialog">
+      <div class="modal-header-bar">
+        <div class="modal-header-meta">
+          <!-- Filled via app.js -->
+        </div>
+        <button class="btn-close-sheet" id="btnCloseModal" aria-label="Cerrar ventana">✕</button>
+      </div>
+      <div class="modal-sheet-body">
+        <!-- Filled via app.js -->
+      </div>
+      <div class="modal-footer-bar">
+        <button class="btn-apple-primary" id="modalOverlayClose">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       Footer
+       ========================================================================= -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-top-row">
+        <div class="footer-brand-wrap">
+          <div class="brand-title" style="margin-bottom: 0.35rem;">Galatea Mobile</div>
+          <p class="footer-principle-quote">
+            <strong>Hacer canal, no rehacer la rueda:</strong> Entregamos bases técnicas sólidas, capacidades reutilizables y gobierno para acelerar la entrega de valor al cliente.
+          </p>
+        </div>
+
+        <div class="footer-numbers">
+          <div class="number-stat">
+            <span class="number-value">20</span>
+            <span class="number-label">Capacidades</span>
+          </div>
+          <div class="number-stat">
+            <span class="number-value">7</span>
+            <span class="number-label">Bloques</span>
+          </div>
+          <div class="number-stat">
+            <span class="number-value">6</span>
+            <span class="number-label">Niveles</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-legal-bar">
+        <span>Galatea Platform • Plataforma de Capacidades Mobile</span>
+        <span>Documentación Interna de Arquitectura y Canales</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js?v=2.5"></script>
+</body>
+</html>

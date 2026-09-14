@@ -1,0 +1,1497 @@
+/* ==========================================================================
+   Galatea - Hilo Conductor | Apple Design System & Motion Architecture
+   True Frosted Glass Translucency & Ambient Kinetic Background
+   ========================================================================== */
+
+:root {
+  /* Apple System Palette - Dark Mode */
+  --apple-bg: #070709;
+  --apple-bg-subtle: #0d0d10;
+  
+  /* Translucent Frosted Glass Card Surfaces */
+  --apple-surface: rgba(22, 22, 28, 0.52);
+  --apple-surface-elevated: rgba(30, 30, 38, 0.62);
+  --apple-surface-hover: rgba(38, 38, 48, 0.72);
+  --apple-surface-active: rgba(48, 48, 60, 0.82);
+  
+  --apple-border: rgba(255, 255, 255, 0.12);
+  --apple-border-strong: rgba(255, 255, 255, 0.22);
+  --apple-border-highlight: rgba(255, 255, 255, 0.35);
+
+  --apple-text-primary: #f5f5f7;
+  --apple-text-secondary: #a1a1a6;
+  --apple-text-tertiary: #6e6e73;
+  --apple-text-quaternary: #48484a;
+
+  /* Apple System Accent Colors */
+  --apple-blue: #2997ff;
+  --apple-blue-subtle: rgba(41, 151, 255, 0.15);
+  --apple-green: #30d158;
+  --apple-amber: #ff9f0a;
+  --apple-purple: #bf5af2;
+  --apple-teal: #64d2ff;
+  --apple-red: #ff453a;
+
+  /* Maturity Indicators */
+  --mat-0: #6e6e73;
+  --mat-1: #bf5af2;
+  --mat-2: #2997ff;
+  --mat-3: #30d158;
+  --mat-4: #ff9f0a;
+  --mat-5: #64d2ff;
+
+  /* Translucency & Glassmorphism */
+  --apple-glass-blur: blur(28px) saturate(200%);
+  --apple-card-specular: inset 0 1px 0 0 rgba(255, 255, 255, 0.16);
+
+  /* Apple Geometry & Shadows */
+  --radius-xs: 6px;
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-xl: 26px;
+  --radius-pill: 9999px;
+
+  --shadow-subtle: 0 4px 20px rgba(0, 0, 0, 0.3);
+  --shadow-hover: 0 12px 36px rgba(0, 0, 0, 0.5);
+  --shadow-modal: 0 24px 72px rgba(0, 0, 0, 0.8);
+
+  /* Typography Stacks */
+  --font-system: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: "SF Mono", SFMono-Regular, ui-monospace, Menlo, Monaco, Consolas, monospace;
+
+  /* Motion & Spring Tokens */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-apple: cubic-bezier(0.32, 0.72, 0, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+
+  --duration-instant: 100ms;
+  --duration-fast: 160ms;
+  --duration-normal: 240ms;
+}
+
+[data-theme="light"] {
+  --apple-bg: #f5f5f7;
+  --apple-bg-subtle: #ffffff;
+  
+  --apple-surface: rgba(255, 255, 255, 0.68);
+  --apple-surface-elevated: rgba(255, 255, 255, 0.82);
+  --apple-surface-hover: rgba(255, 255, 255, 0.94);
+  --apple-surface-active: #e5e5ea;
+
+  --apple-border: rgba(0, 0, 0, 0.08);
+  --apple-border-strong: rgba(0, 0, 0, 0.18);
+  --apple-border-highlight: rgba(0, 0, 0, 0.28);
+
+  --apple-text-primary: #1d1d1f;
+  --apple-text-secondary: #515154;
+  --apple-text-tertiary: #86868b;
+  --apple-text-quaternary: #c7c7cc;
+
+  --apple-blue: #0071e3;
+  --apple-blue-subtle: rgba(0, 113, 227, 0.1);
+  --apple-green: #28cd41;
+  --apple-amber: #f58200;
+  --apple-purple: #af52de;
+  --apple-teal: #00c7be;
+  --apple-red: #ff3b30;
+
+  --apple-card-specular: inset 0 1px 0 0 rgba(255, 255, 255, 0.95);
+  --shadow-subtle: 0 4px 18px rgba(0, 0, 0, 0.06);
+  --shadow-hover: 0 12px 32px rgba(0, 0, 0, 0.1);
+  --shadow-modal: 0 24px 64px rgba(0, 0, 0, 0.16);
+}
+
+/* ==========================================================================
+   CSS Reset & Page Architecture
+   ========================================================================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-family: var(--font-system);
+  background-color: var(--apple-bg);
+  color: var(--apple-text-primary);
+  line-height: 1.47;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--apple-bg);
+  color: var(--apple-text-primary);
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Ensure all page content stacks ABOVE the background */
+.header,
+main.container,
+.footer,
+.apple-modal-scrim {
+  position: relative;
+  z-index: 1;
+}
+
+/* ==========================================================================
+   Ambient Kinetic Background ("El Hilo Conductor" Fluid Glow & Waves)
+   ========================================================================== */
+.ambient-background {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0; /* Placed directly on top of body canvas, behind cards! */
+  overflow: hidden;
+}
+
+.ambient-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  opacity: 0.85;
+  z-index: 2;
+}
+
+.ambient-glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(85px);
+  opacity: 0.65;
+  will-change: transform, opacity;
+  transform: translate3d(0, 0, 0);
+  z-index: 1;
+}
+
+[data-theme="light"] .ambient-glow {
+  opacity: 0.38;
+  filter: blur(100px);
+}
+
+/* Orb 1: Apple Electric Blue */
+.ambient-glow-1 {
+  width: 680px;
+  height: 680px;
+  background: radial-gradient(circle, rgba(41, 151, 255, 0.7) 0%, rgba(41, 151, 255, 0.15) 50%, transparent 70%);
+  top: -120px;
+  left: 5%;
+  animation: floatOrb1 18s var(--ease-in-out) infinite alternate;
+}
+
+/* Orb 2: Deep Violet / Indigo */
+.ambient-glow-2 {
+  width: 720px;
+  height: 720px;
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.6) 0%, rgba(168, 85, 247, 0.12) 50%, transparent 70%);
+  top: 30%;
+  right: -80px;
+  animation: floatOrb2 22s var(--ease-in-out) infinite alternate;
+}
+
+/* Orb 3: Cyan / Teal Flare */
+.ambient-glow-3 {
+  width: 620px;
+  height: 620px;
+  background: radial-gradient(circle, rgba(6, 182, 212, 0.55) 0%, rgba(6, 182, 212, 0.1) 50%, transparent 70%);
+  bottom: 5%;
+  left: 15%;
+  animation: floatOrb3 20s var(--ease-in-out) infinite alternate;
+}
+
+/* Ambient Thread Line */
+.ambient-thread-line {
+  position: absolute;
+  top: 15%;
+  left: -20%;
+  width: 140%;
+  height: 650px;
+  background: radial-gradient(ellipse at center, rgba(41, 151, 255, 0.22) 0%, rgba(147, 51, 234, 0.15) 40%, transparent 70%);
+  transform: rotate(-10deg);
+  opacity: 0.85;
+  filter: blur(45px);
+  animation: floatThread 16s var(--ease-in-out) infinite alternate;
+  z-index: 1;
+}
+
+@keyframes floatOrb1 {
+  0% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(140px, 90px, 0) scale(1.15); }
+  100% { transform: translate3d(-70px, 150px, 0) scale(0.92); }
+}
+
+@keyframes floatOrb2 {
+  0% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(-150px, -100px, 0) scale(1.18); }
+  100% { transform: translate3d(90px, 120px, 0) scale(0.9); }
+}
+
+@keyframes floatOrb3 {
+  0% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(100px, -120px, 0) scale(1.2); }
+  100% { transform: translate3d(-110px, 70px, 0) scale(0.88); }
+}
+
+@keyframes floatThread {
+  0% { transform: rotate(-10deg) translateY(0) scale(1); }
+  100% { transform: rotate(-5deg) translateY(70px) scale(1.1); }
+}
+
+/* Container */
+.container {
+  width: 100%;
+  max-width: 1220px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+/* ==========================================================================
+   Header (Apple Frosted Glass)
+   ========================================================================== */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--apple-surface);
+  backdrop-filter: var(--apple-glass-blur);
+  -webkit-backdrop-filter: var(--apple-glass-blur);
+  border-bottom: 1px solid var(--apple-border);
+  box-shadow: var(--apple-card-specular);
+  transition: background var(--duration-fast) var(--ease-out), border-color var(--duration-fast) var(--ease-out);
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 3.75rem;
+}
+
+.brand-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--apple-text-primary);
+  text-decoration: none;
+  cursor: pointer;
+  user-select: none;
+  transition: opacity var(--duration-fast) var(--ease-out);
+}
+
+.brand-wrapper:hover {
+  opacity: 0.85;
+  text-decoration: none;
+}
+
+.brand-wrapper:active {
+  transform: scale(0.98);
+  transition: transform var(--duration-instant) var(--ease-out);
+}
+
+.brand-icon {
+  width: 2rem;
+  height: 2rem;
+  border-radius: var(--radius-xs);
+  background: var(--apple-surface-elevated);
+  border: 1px solid var(--apple-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--apple-text-primary);
+  box-shadow: var(--shadow-subtle);
+}
+
+.brand-icon svg {
+  width: 1.15rem;
+  height: 1.15rem;
+}
+
+.brand-text {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.brand-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.brand-pill {
+  font-size: 0.68rem;
+  font-weight: 500;
+  color: var(--apple-text-secondary);
+  background: var(--apple-surface-hover);
+  padding: 0.15rem 0.5rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--apple-border);
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.header-meta-pill {
+  font-size: 0.78rem;
+  color: var(--apple-text-secondary);
+  background: var(--apple-surface);
+  backdrop-filter: var(--apple-glass-blur);
+  -webkit-backdrop-filter: var(--apple-glass-blur);
+  border: 1px solid var(--apple-border);
+  padding: 0.3rem 0.85rem;
+  border-radius: var(--radius-pill);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.header-meta-pill strong {
+  color: var(--apple-text-primary);
+  font-weight: 600;
+}
+
+.btn-icon {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background: var(--apple-surface);
+  border: 1px solid var(--apple-border);
+  color: var(--apple-text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-out);
+}
+
+.btn-icon:hover {
+  background: var(--apple-surface-hover);
+  color: var(--apple-text-primary);
+  border-color: var(--apple-border-strong);
+}
+
+.btn-icon:active {
+  transform: scale(0.94);
+  transition: transform var(--duration-instant) var(--ease-out);
+}
+
+/* ==========================================================================
+   Hero Section
+   ========================================================================== */
+.hero {
+  padding: 4.5rem 0 3rem;
+  text-align: center;
+}
+
+.hero-content {
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.hero-kicker {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--apple-blue);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 0.75rem;
+}
+
+.hero-title {
+  font-size: clamp(2.4rem, 5vw, 3.8rem);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.035em;
+  color: var(--apple-text-primary);
+  margin-bottom: 1.25rem;
+}
+
+.hero-description {
+  font-size: 1.16rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--apple-text-secondary);
+  letter-spacing: -0.01em;
+}
+
+/* ==========================================================================
+   Strategic Priorities - Translucent Frosted Glass Cards
+   ========================================================================== */
+.priorities-section {
+  margin: 2.5rem 0 3.5rem;
+}
+
+.section-eyebrow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+  padding: 0 0.25rem;
+}
+
+.section-heading {
+  font-size: 0.86rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--apple-text-secondary);
+}
+
+.section-caption {
+  font-size: 0.8rem;
+  color: var(--apple-text-tertiary);
+}
+
+.priorities-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+.priority-card {
+  background: var(--apple-surface);
+  backdrop-filter: var(--apple-glass-blur);
+  -webkit-backdrop-filter: var(--apple-glass-blur);
+  border: 1px solid var(--apple-border);
+  box-shadow: var(--apple-card-specular), var(--shadow-subtle);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem 1.25rem;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  transition: transform var(--duration-fast) var(--ease-out),
+              background var(--duration-fast) var(--ease-out),
+              border-color var(--duration-fast) var(--ease-out),
+              box-shadow var(--duration-fast) var(--ease-out);
+  user-select: none;
+}
+
+.priority-card:hover {
+  background: var(--apple-surface-elevated);
+  border-color: rgba(41, 151, 255, 0.4);
+  transform: translateY(-3px);
+  box-shadow: var(--apple-card-specular), var(--shadow-hover);
+}
+
+.priority-card:active {
+  transform: scale(0.98);
+  transition: transform var(--duration-instant) var(--ease-out);
+}
+
+.priority-badge {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--apple-blue);
+  margin-bottom: 0.65rem;
+  letter-spacing: 0.02em;
+}
+
+.priority-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -0.015em;
+  color: var(--apple-text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.priority-summary {
+  font-size: 0.84rem;
+  color: var(--apple-text-secondary);
+  line-height: 1.45;
+  margin-bottom: 1.25rem;
+  flex-grow: 1;
+}
+
+.priority-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.78rem;
+  color: var(--apple-text-tertiary);
+  border-top: 1px solid var(--apple-border);
+  padding-top: 0.85rem;
+}
+
+.priority-link {
+  color: var(--apple-blue);
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+/* ==========================================================================
+   Lifecycle Rail (Hilo Conductor Timeline)
+   ========================================================================== */
+.lifecycle-section {
+  margin-bottom: 3.5rem;
+}
+
+.lifecycle-box {
+  background: var(--apple-surface);
+  backdrop-filter: var(--apple-glass-blur);
+  -webkit-backdrop-filter: var(--apple-glass-blur);
+  border: 1px solid var(--apple-border);
+  box-shadow: var(--apple-card-specular), var(--shadow-subtle);
+  border-radius: var(--radius-xl);
+  padding: 1.75rem 2rem;
+}
+
+.lifecycle-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.lifecycle-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  color: var(--apple-text-primary);
+}
+
+.lifecycle-subtext {
+  font-size: 0.84rem;
+  color: var(--apple-text-secondary);
+}
+
+.stepper-rail {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 0.5rem;
+}
+
+.stepper-item {
+  background: var(--apple-surface-elevated);
+  backdrop-filter: var(--apple-glass-blur);
+  -webkit-backdrop-filter: var(--apple-glass-blur);
+  border: 1px solid var(--apple-border);
+  border-radius: var(--radius-md);
+  padding: 1rem 0.65rem;
+  text-align: center;
+  cursor: pointer;
+  user-select: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.45rem;
+  transition: all var(--duration-fast) var(--ease-out);
+}
+
+.stepper-item:hover {
+  background: var(--apple-surface-hover);
+  border-color: var(--apple-border-strong);
+  transform: translateY(-2px);
+}
+
+.stepper-item:active {
+  transform: scale(0.97);
+  transition: transform var(--duration-instant) var(--ease-out);
+}
+
+.stepper-item.active {
+  background: var(--apple-surface-active);
+  border-color: var(--apple-blue);
+  box-shadow: 0 0 0 1px var(--apple-blue);
+}
+
+.stepper-dot {
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  background: var(--apple-surface);
+  border: 1px solid var(--apple-border-strong);
+  font-size: 0.72rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--apple-text-secondary);
+  transition: all var(--duration-fast) var(--ease-out);
+}
+
+.stepper-item.active .stepper-dot {
+  background: var(--apple-blue);
+  border-color: var(--apple-blue);
+  color: #ffffff;
+}
+
+.stepper-name {
+  font-size: 0.8rem;
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--apple-text-primary);
+}
+
+.stepper-sub {
+  font-size: 0.7rem;
+  color: var(--apple-text-tertiary);
+  line-height: 1.25;
+}
+
+.stage-filter-toast {
+  margin-top: 1.25rem;
+  padding: 0.65rem 1rem;
+  background: var(--apple-surface-hover);
+  backdrop-filter: var(--apple-glass-blur);
+  -webkit-backdrop-filter: var(--apple-glass-blur);
+  border: 1px solid var(--apple-border);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.84rem;
+  color: var(--apple-text-primary);
+  animation: fadeIn 200ms var(--ease-out);
+}
+
+.btn-toast-clear {
+  background: none;
+  border: none;
+  color: var(--apple-blue);
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--radius-xs);
+}
+
+.btn-toast-clear:hover {
+  text-decoration: underline;
+}
+
+/* ==========================================================================
+   Controls Card (Search & Segmented Filters)
+   ========================================================================== */
+.controls-card {
+  background: var(--apple-surface);
+  backdrop-filter: var(--apple-glass-blur);
+  -webkit-backdrop-filter: var(--apple-glass-blur);
+  border: 1px solid var(--apple-border);
+  box-shadow: var(--apple-card-specular), var(--shadow-subtle);
+  border-radius: var(--radius-xl);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.search-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.apple-search-field {
+  position: relative;
+  flex: 1;
+  min-width: 280px;
+}
+
+.apple-search-icon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--apple-text-tertiary);
+  pointer-events: none;
+  width: 1rem;
+  height: 1rem;
+}
+
+.apple-input {
+  width: 100%;
+  height: 2.6rem;
+  background: var(--apple-surface-elevated);
+  backdrop-filter: var(--apple-glass-blur);
+  -webkit-backdrop-filter: var(--apple-glass-blur);
+  border: 1px solid var(--apple-border);
+  border-radius: var(--radius-md);
+  padding: 0 3rem 0 2.65rem;
+  color: var(--apple-text-primary);
+  font-size: 0.92rem;
+  font-family: inherit;
+  outline: none;
+  transition: all var(--duration-fast) var(--ease-out);
+}
+
+.apple-input::placeholder {
+  color: var(--apple-text-tertiary);
+}
+
+.apple-input:focus {
+  border-color: var(--apple-blue);
+  box-shadow: 0 0 0 3px var(--apple-blue-subtle);
+  background: var(--apple-bg);
+}
+
+.search-key-badge {
+  position: absolute;
+  right: 0.85rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.72rem;
+  font-family: var(--font-mono);
+  background: var(--apple-surface-active);
+  color: var(--apple-text-tertiary);
+  padding: 0.15rem 0.4rem;
+  border-radius: var(--radius-xs);
+  border: 1px solid var(--apple-border);
+  pointer-events: none;
+}
+
+.apple-segmented-group {
+  display: inline-flex;
+  background: var(--apple-surface-elevated);
+  backdrop-filter: var(--apple-glass-blur);
+  -webkit-backdrop-filter: var(--apple-glass-blur);
+  padding: 0.2rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--apple-border);
+  gap: 0.2rem;
+}
+
+.segmented-btn {
+  border: none;
+  background: transparent;
+  color: var(--apple-text-secondary);
+  padding: 0.4rem 0.95rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.82rem;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-out);
+  user-select: none;
+}
+
+.segmented-btn:hover {
+  color: var(--apple-text-primary);
+}
+
+.segmented-btn:active {
+  transform: scale(0.97);
+  transition: transform var(--duration-instant) var(--ease-out);
+}
+
+.segmented-btn.active {
+  background: var(--apple-surface-active);
+  color: var(--apple-text-primary);
+  box-shadow: var(--shadow-subtle);
+  font-weight: 600;
+}
+
+[data-theme="light"] .segmented-btn.active {
+  background: #ffffff;
+  color: #1d1d1f;
+}
+
+.filter-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  border-top: 1px solid var(--apple-border);
+  padding-top: 0.85rem;
+}
+
+.filter-line {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.filter-title {
+  font-size: 0.76rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--apple-text-tertiary);
+  letter-spacing: 0.04em;
+  min-width: 75px;
+}
+
+.filter-chips-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.apple-chip {
+  background: var(--apple-surface-elevated);
+  backdrop-filter: var(--apple-glass-blur);
+  -webkit-backdrop-filter: var(--apple-glass-blur);
+  border: 1px solid var(--apple-border);
+  color: var(--apple-text-secondary);
+  font-size: 0.8rem;
+  font-weight: 400;
+  padding: 0.28rem 0.75rem;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-out);
+  user-select: none;
+}
+
+.apple-chip:hover {
+  background: var(--apple-surface-hover);
+  color: var(--apple-text-primary);
+  border-color: var(--apple-border-strong);
+}
+
+.apple-chip:active {
+  transform: scale(0.96);
+  transition: transform var(--duration-instant) var(--ease-out);
+}
+
+.apple-chip.active {
+  background: var(--apple-text-primary);
+  color: var(--apple-bg);
+  border-color: transparent;
+  font-weight: 500;
+}
+
+/* ==========================================================================
+   Capabilities Catalog Grid (True Apple Translucent Cards)
+   ========================================================================== */
+.catalog-section {
+  margin-bottom: 5rem;
+}
+
+.catalog-status-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+  padding: 0 0.25rem;
+  font-size: 0.84rem;
+  color: var(--apple-text-secondary);
+}
+
+.capabilities-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 1.25rem;
+}
+
+.cap-card {
+  background: var(--apple-surface);
+  backdrop-filter: var(--apple-glass-blur);
+  -webkit-backdrop-filter: var(--apple-glass-blur);
+  border: 1px solid var(--apple-border);
+  box-shadow: var(--apple-card-specular), var(--shadow-subtle);
+  border-radius: var(--radius-lg);
+  padding: 1.4rem;
+  display: flex;
+  flex-direction: column;
+  transition: transform var(--duration-fast) var(--ease-out),
+              background var(--duration-fast) var(--ease-out),
+              border-color var(--duration-fast) var(--ease-out),
+              box-shadow var(--duration-fast) var(--ease-out);
+  cursor: pointer;
+  user-select: none;
+  animation: cardFadeIn 280ms var(--ease-out);
+}
+
+.cap-card:hover {
+  background: var(--apple-surface-elevated);
+  border-color: rgba(41, 151, 255, 0.45);
+  transform: translateY(-4px);
+  box-shadow: var(--apple-card-specular), var(--shadow-hover);
+}
+
+.cap-card:active {
+  transform: scale(0.98);
+  transition: transform var(--duration-instant) var(--ease-out);
+}
+
+.card-header-line {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.85rem;
+}
+
+.category-tag {
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--apple-text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.maturity-indicator {
+  font-size: 0.74rem;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--apple-text-secondary);
+}
+
+.indicator-dot {
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.card-heading {
+  font-size: 1.15rem;
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -0.018em;
+  color: var(--apple-text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.card-summary {
+  font-size: 0.88rem;
+  color: var(--apple-text-secondary);
+  line-height: 1.48;
+  margin-bottom: 1.15rem;
+  flex-grow: 1;
+}
+
+.card-chips-cluster {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-bottom: 1.15rem;
+}
+
+.mini-chip {
+  font-size: 0.74rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: var(--radius-xs);
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--apple-border);
+  color: var(--apple-text-secondary);
+}
+
+[data-theme="light"] .mini-chip {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.card-foot {
+  border-top: 1px solid var(--apple-border);
+  padding-top: 0.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.82rem;
+}
+
+.card-benefit-text {
+  font-size: 0.8rem;
+  color: var(--apple-text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 230px;
+}
+
+.card-action-link {
+  color: var(--apple-blue);
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+/* ==========================================================================
+   Maturity Matrix View
+   ========================================================================== */
+.matrix-container {
+  display: none;
+  overflow-x: auto;
+  padding-bottom: 1rem;
+}
+
+.matrix-container.active {
+  display: block;
+}
+
+.matrix-grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(210px, 1fr));
+  gap: 0.85rem;
+  min-width: 1260px;
+}
+
+.matrix-col {
+  background: var(--apple-surface);
+  backdrop-filter: var(--apple-glass-blur);
+  -webkit-backdrop-filter: var(--apple-glass-blur);
+  border: 1px solid var(--apple-border);
+  box-shadow: var(--apple-card-specular), var(--shadow-subtle);
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.matrix-col-top {
+  padding: 1rem;
+  border-bottom: 1px solid var(--apple-border);
+  background: var(--apple-surface-elevated);
+}
+
+.matrix-level-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 0.2rem;
+}
+
+.matrix-level-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--apple-text-primary);
+}
+
+.matrix-level-desc {
+  font-size: 0.74rem;
+  color: var(--apple-text-tertiary);
+  margin-top: 0.35rem;
+  line-height: 1.35;
+}
+
+.matrix-cards-stack {
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  flex-grow: 1;
+}
+
+.matrix-item {
+  background: var(--apple-surface-elevated);
+  backdrop-filter: var(--apple-glass-blur);
+  -webkit-backdrop-filter: var(--apple-glass-blur);
+  border: 1px solid var(--apple-border);
+  border-radius: var(--radius-md);
+  padding: 0.85rem;
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-out);
+}
+
+.matrix-item:hover {
+  background: var(--apple-surface-hover);
+  border-color: var(--apple-border-strong);
+  transform: translateY(-1px);
+}
+
+.matrix-item:active {
+  transform: scale(0.97);
+  transition: transform var(--duration-instant) var(--ease-out);
+}
+
+.matrix-item-category {
+  font-size: 0.68rem;
+  color: var(--apple-text-tertiary);
+  text-transform: uppercase;
+  margin-bottom: 0.25rem;
+}
+
+.matrix-item-name {
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: var(--apple-text-primary);
+  line-height: 1.3;
+}
+
+/* ==========================================================================
+   Apple Sheet / Modal Dialog (Frosted Glass Physics)
+   ========================================================================== */
+.apple-modal-scrim {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--duration-normal) var(--ease-out),
+              visibility var(--duration-normal) var(--ease-out);
+}
+
+.apple-modal-scrim.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.apple-modal-window {
+  background: rgba(26, 26, 34, 0.85);
+  backdrop-filter: blur(36px) saturate(220%);
+  -webkit-backdrop-filter: blur(36px) saturate(220%);
+  border: 1px solid var(--apple-border-strong);
+  border-radius: var(--radius-xl);
+  width: 100%;
+  max-width: 740px;
+  max-height: 88vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-modal), var(--apple-card-specular);
+  transform: scale(0.96) translateY(12px);
+  transition: transform var(--duration-normal) var(--ease-apple),
+              opacity var(--duration-normal) var(--ease-out);
+  position: relative;
+}
+
+[data-theme="light"] .apple-modal-window {
+  background: rgba(255, 255, 255, 0.92);
+}
+
+.apple-modal-scrim.open .apple-modal-window {
+  transform: scale(1) translateY(0);
+}
+
+.modal-header-bar {
+  padding: 1.5rem 1.75rem 1.15rem;
+  border-bottom: 1px solid var(--apple-border);
+  position: sticky;
+  top: 0;
+  background: var(--apple-surface-elevated);
+  backdrop-filter: var(--apple-glass-blur);
+  -webkit-backdrop-filter: var(--apple-glass-blur);
+  z-index: 10;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.modal-header-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.modal-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.78rem;
+  color: var(--apple-text-secondary);
+}
+
+.modal-sheet-title {
+  font-size: 1.45rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: var(--apple-text-primary);
+}
+
+.btn-close-sheet {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  border: 1px solid var(--apple-border);
+  background: var(--apple-surface);
+  color: var(--apple-text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-out);
+}
+
+.btn-close-sheet:hover {
+  background: var(--apple-surface-hover);
+  color: var(--apple-text-primary);
+}
+
+.btn-close-sheet:active {
+  transform: scale(0.92);
+  transition: transform var(--duration-instant) var(--ease-out);
+}
+
+.modal-sheet-body {
+  padding: 1.5rem 1.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.sheet-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.sheet-section-title {
+  font-size: 0.76rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--apple-text-tertiary);
+}
+
+.sheet-text {
+  font-size: 0.94rem;
+  color: var(--apple-text-secondary);
+  line-height: 1.55;
+}
+
+.apple-benefit-box {
+  background: var(--apple-surface);
+  border-left: 3px solid var(--apple-green);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  padding: 0.85rem 1.15rem;
+  font-size: 0.92rem;
+  color: var(--apple-text-primary);
+  line-height: 1.5;
+}
+
+.sheet-checklist {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0.5rem;
+}
+
+.sheet-check-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.86rem;
+  color: var(--apple-text-primary);
+  background: var(--apple-surface);
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--radius-xs);
+  border: 1px solid var(--apple-border);
+}
+
+.sheet-check-item svg {
+  color: var(--apple-green);
+  flex-shrink: 0;
+}
+
+.apple-code-box {
+  background: rgba(0, 0, 0, 0.75);
+  border: 1px solid var(--apple-border);
+  border-radius: var(--radius-sm);
+  padding: 1rem 1.15rem;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  color: var(--apple-teal);
+  overflow-x: auto;
+  line-height: 1.5;
+}
+
+.apple-gap-box {
+  background: var(--apple-surface);
+  border-left: 3px solid var(--apple-amber);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  padding: 0.85rem 1.15rem;
+  font-size: 0.88rem;
+  color: var(--apple-text-secondary);
+  line-height: 1.5;
+}
+
+.modal-footer-bar {
+  padding: 1.15rem 1.75rem;
+  border-top: 1px solid var(--apple-border);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  background: var(--apple-surface-elevated);
+}
+
+.btn-apple-primary {
+  background: var(--apple-blue);
+  color: #ffffff;
+  border: none;
+  font-size: 0.88rem;
+  font-weight: 500;
+  padding: 0.55rem 1.25rem;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-out);
+  user-select: none;
+}
+
+.btn-apple-primary:hover {
+  opacity: 0.92;
+}
+
+.btn-apple-primary:active {
+  transform: scale(0.97);
+  transition: transform var(--duration-instant) var(--ease-out);
+}
+
+/* ==========================================================================
+   Apple Footer
+   ========================================================================== */
+.footer {
+  margin-top: auto;
+  border-top: 1px solid var(--apple-border);
+  background: var(--apple-surface);
+  backdrop-filter: var(--apple-glass-blur);
+  -webkit-backdrop-filter: var(--apple-glass-blur);
+  padding: 3.5rem 0 2.5rem;
+}
+
+.footer-top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 2.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 2.5rem;
+}
+
+.footer-brand-wrap {
+  max-width: 420px;
+}
+
+.footer-principle-quote {
+  font-size: 0.86rem;
+  color: var(--apple-text-secondary);
+  line-height: 1.6;
+  margin-top: 0.65rem;
+}
+
+.footer-numbers {
+  display: flex;
+  gap: 2.5rem;
+}
+
+.number-stat {
+  display: flex;
+  flex-direction: column;
+}
+
+.number-value {
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--apple-text-primary);
+}
+
+.number-label {
+  font-size: 0.74rem;
+  color: var(--apple-text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.footer-legal-bar {
+  border-top: 1px solid var(--apple-border);
+  padding-top: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.76rem;
+  color: var(--apple-text-tertiary);
+  flex-wrap: wrap;
+  gap: 0.85rem;
+}
+
+/* ==========================================================================
+   Animations & Motion Classes
+   ========================================================================== */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes cardFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .ambient-glow-1,
+  .ambient-glow-2,
+  .ambient-glow-3,
+  .ambient-thread-line,
+  .ambient-canvas {
+    display: none !important;
+  }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Responsive Adjustments */
+@media (max-width: 1024px) {
+  .priorities-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .stepper-rail {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 0 1.25rem;
+  }
+  .header-content {
+    height: auto;
+    padding: 0.85rem 0;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+  .header-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .priorities-grid {
+    grid-template-columns: 1fr;
+  }
+  .stepper-rail {
+    display: flex;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+  }
+  .stepper-item {
+    min-width: 130px;
+  }
+  .capabilities-grid {
+    grid-template-columns: 1fr;
+  }
+  .footer-top-row {
+    flex-direction: column;
+  }
+  .footer-numbers {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
