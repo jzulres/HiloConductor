@@ -626,6 +626,8 @@ GalateaEmbeddedPay.startPayment({
   ];
 
   // --- 3. State Management ---
+  let matrixDragMoved = false;
+
   const state = {
     selectedBlock: 'all',
     selectedMaturity: 'all',
@@ -814,6 +816,7 @@ GalateaEmbeddedPay.startPayment({
 
       col.querySelectorAll('.matrix-item').forEach((itemEl) => {
         itemEl.addEventListener('click', () => {
+          if (matrixDragMoved) return;
           const cap = CAPABILITIES.find((c) => c.id === itemEl.dataset.id);
           if (cap) openDetailModal(cap);
         });
@@ -1051,6 +1054,92 @@ GalateaEmbeddedPay.startPayment({
     }
   }
 
+  // --- 9. Horizontal Mouse Drag-to-Scroll Gesture ---
+  function setupMatrixDragScroll() {
+    const container = elements.matrixContainer;
+    if (!container) return;
+
+    let isDown = false;
+    let startX = 0;
+    let scrollStart = 0;
+    let velX = 0;
+    let lastX = 0;
+    let momentumID = null;
+
+    container.addEventListener('mousedown', (e) => {
+      // Primary left click only
+      if (e.button !== 0) return;
+
+      isDown = true;
+      matrixDragMoved = false;
+      cancelAnimationFrame(momentumID);
+      startX = e.pageX - container.offsetLeft;
+      scrollStart = container.scrollLeft;
+      lastX = e.pageX;
+      velX = 0;
+    });
+
+    window.addEventListener('mousemove', (e) => {
+      if (!isDown) return;
+
+      const x = e.pageX - container.offsetLeft;
+      const walk = x - startX;
+
+      if (Math.abs(walk) > 5) {
+        matrixDragMoved = true;
+        container.classList.add('is-dragging');
+      }
+
+      if (matrixDragMoved) {
+        e.preventDefault();
+        container.scrollLeft = scrollStart - walk;
+        velX = e.pageX - lastX;
+        lastX = e.pageX;
+      }
+    });
+
+    const stopDragging = () => {
+      if (!isDown) return;
+      isDown = false;
+      container.classList.remove('is-dragging');
+
+      if (matrixDragMoved && Math.abs(velX) > 1) {
+        applyMomentum();
+      }
+
+      // Allow click event listeners to verify matrixDragMoved before resetting
+      setTimeout(() => {
+        matrixDragMoved = false;
+      }, 80);
+    };
+
+    window.addEventListener('mouseup', stopDragging);
+    window.addEventListener('mouseleave', stopDragging);
+
+    function applyMomentum() {
+      cancelAnimationFrame(momentumID);
+      velX *= 0.92;
+      container.scrollLeft -= velX;
+      if (Math.abs(velX) > 0.5) {
+        momentumID = requestAnimationFrame(applyMomentum);
+      }
+    }
+
+    // Convert mouse wheel into smooth horizontal scroll over matrix
+    container.addEventListener(
+      'wheel',
+      (e) => {
+        if (e.deltaY !== 0 && !e.shiftKey) {
+          if (Math.abs(e.deltaX) < Math.abs(e.deltaY)) {
+            e.preventDefault();
+            container.scrollLeft += e.deltaY;
+          }
+        }
+      },
+      { passive: false }
+    );
+  }
+
   // --- 10. Kinetic Thread Wave Canvas ("El Hilo Conductor") ---
   function initAmbientCanvas() {
     const canvas = document.getElementById('ambientCanvas');
@@ -1136,6 +1225,7 @@ GalateaEmbeddedPay.startPayment({
   function init() {
     elements.totalCapsCount.textContent = `${CAPABILITIES.length} capacidades`;
     setupEventListeners();
+    setupMatrixDragScroll();
     updateUI();
     initAmbientCanvas();
   }

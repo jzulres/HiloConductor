@@ -1020,12 +1020,36 @@ main.container,
 }
 
 /* ==========================================================================
-   Maturity Matrix View
+   Maturity Matrix View (Horizontal Drag-to-Scroll & Sleek Surface)
    ========================================================================== */
 .matrix-container {
   display: none;
   overflow-x: auto;
   padding-bottom: 1rem;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE / Edge */
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.matrix-container::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Edge, Opera */
+  width: 0;
+  height: 0;
+}
+
+.matrix-container.is-dragging {
+  cursor: grabbing !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
+}
+
+.matrix-container.is-dragging .matrix-col,
+.matrix-container.is-dragging .matrix-item {
+  cursor: grabbing !important;
+  user-select: none !important;
 }
 
 .matrix-container.active {
