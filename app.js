@@ -1267,38 +1267,74 @@ GalateaEmbeddedPay.startPayment({
     renderWaves();
   }
 
-  // --- 11. Section Snap & Dynamic Fade Controller ---
-  function initSectionSnapController() {
+  // --- 11. Free Scroll Section Navigation Tracker ---
+  function initSectionNavTracker() {
     const sections = Array.from(document.querySelectorAll('.snap-section'));
     const dots = Array.from(document.querySelectorAll('.nav-rail-dot'));
     const scrollCue = document.getElementById('heroScrollCue');
 
     if (!sections.length) return;
 
-    let currentIndex = 0;
-    let isTransitioning = false;
-    let transitionTimeout = null;
+    function scrollToSection(targetIndex) {
+      if (targetIndex < 0 || targetIndex >= sections.length) return;
+      const targetSec = sections[targetIndex];
+      if (!targetSec) return;
 
-    function updateSectionVisuals(targetIndex) {
+      if (targetIndex === 0) {
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
+      } else {
+        const headerEl = document.querySelector('.header');
+        const headerHeight = headerEl ? headerEl.offsetHeight : 60;
+        const targetTop = targetSec.getBoundingClientRect().top + window.pageYOffset - headerHeight - 16;
+
+        window.scrollTo({
+          top: Math.max(0, targetTop),
+          behavior: 'smooth'
+        });
+      }
+    }
+
+    // Floating Rail Dot Click Handlers
+    dots.forEach((dot) => {
+      dot.addEventListener('click', (e) => {
+        e.preventDefault();
+        const idx = parseInt(dot.getAttribute('data-index'), 10);
+        if (!isNaN(idx)) {
+          scrollToSection(idx);
+        }
+      });
+    });
+
+    // Scroll Cue Click Handler
+    if (scrollCue) {
+      scrollCue.addEventListener('click', (e) => {
+        e.preventDefault();
+        scrollToSection(1);
+      });
+    }
+
+    // Update active rail dot and scroll cue as user scrolls naturally
+    function updateActiveSectionOnScroll() {
+      const headerEl = document.querySelector('.header');
+      const headerHeight = headerEl ? headerEl.offsetHeight : 60;
+      const scrollPos = window.pageYOffset + headerHeight + 80;
+
+      let currentIdx = 0;
       sections.forEach((sec, idx) => {
-        if (idx < targetIndex) {
-          sec.classList.remove('is-active');
-          sec.classList.add('is-passed');
-        } else if (idx === targetIndex) {
-          sec.classList.add('is-active');
-          sec.classList.remove('is-passed');
-        } else {
-          sec.classList.remove('is-active');
-          sec.classList.remove('is-passed');
+        if (scrollPos >= sec.offsetTop) {
+          currentIdx = idx;
         }
       });
 
       dots.forEach((dot, idx) => {
-        dot.classList.toggle('active', idx === targetIndex);
+        dot.classList.toggle('active', idx === currentIdx);
       });
 
       if (scrollCue) {
-        if (targetIndex > 0) {
+        if (window.pageYOffset > 70) {
           scrollCue.style.opacity = '0';
           scrollCue.style.pointerEvents = 'none';
           scrollCue.style.transform = 'translateY(12px)';
@@ -1310,251 +1346,8 @@ GalateaEmbeddedPay.startPayment({
       }
     }
 
-    function goToSection(targetIndex, smooth = true) {
-      if (targetIndex < 0 || targetIndex >= sections.length) return;
-      currentIndex = targetIndex;
-      updateSectionVisuals(targetIndex);
-
-      const targetSec = sections[targetIndex];
-      if (targetSec) {
-        if (targetIndex === 0) {
-          window.scrollTo({
-            top: 0,
-            behavior: smooth ? 'smooth' : 'auto'
-          });
-        } else {
-          const headerEl = document.querySelector('.header');
-          const headerHeight = headerEl ? headerEl.offsetHeight : 60;
-          const extraGap = 20; // Clear breathing gap below fixed header
-          const targetTop = targetSec.getBoundingClientRect().top + window.pageYOffset - headerHeight - extraGap;
-
-          window.scrollTo({
-            top: Math.max(0, targetTop),
-            behavior: smooth ? 'smooth' : 'auto'
-          });
-        }
-      }
-
-      isTransitioning = true;
-      clearTimeout(transitionTimeout);
-      transitionTimeout = setTimeout(() => {
-        isTransitioning = false;
-      }, 700);
-    }
-
-    // Floating Rail Dot Click Handlers
-    dots.forEach((dot) => {
-      dot.addEventListener('click', (e) => {
-        e.preventDefault();
-        const idx = parseInt(dot.getAttribute('data-index'), 10);
-        if (!isNaN(idx)) {
-          goToSection(idx);
-        }
-      });
-    });
-
-    // Scroll Cue Click Handler
-    if (scrollCue) {
-      scrollCue.addEventListener('click', (e) => {
-        e.preventDefault();
-        goToSection(1);
-      });
-    }
-
-    // Boundary threshold accumulator to avoid hair-trigger section snapping
-    let edgeDeltaAccumulator = 0;
-    let edgeResetTimer = null;
-
-    // Wheel Scroll Interceptor (Desktop & Tablet Snap Scrolling for 3 Sections)
-    window.addEventListener('wheel', (e) => {
-      if (window.innerWidth <= 768) return;
-      if (document.body.classList.contains('modal-open')) return;
-
-      const delta = e.deltaY;
-      if (Math.abs(delta) < 16) return; // Ignore trackpad flutter
-
-      if (currentIndex === 0) {
-        // Section 0 (Hero): deliberate scroll down transitions to Section 1
-        if (delta > 25) {
-          e.preventDefault();
-          if (!isTransitioning) goToSection(1);
-        }
-        return;
-      }
-
-      if (currentIndex === 1) {
-        // Section 1 (Concepto & Trayectoria): comfortable reading flow
-        if (delta < 0) {
-          // Scrolling UP inside Section 1
-          const sec1Top = sections[1] ? sections[1].getBoundingClientRect().top : 0;
-          if (sec1Top >= 65) {
-            e.preventDefault();
-            edgeDeltaAccumulator += delta;
-            clearTimeout(edgeResetTimer);
-            edgeResetTimer = setTimeout(() => { edgeDeltaAccumulator = 0; }, 300);
-
-            if (edgeDeltaAccumulator <= -75 && !isTransitioning) {
-              edgeDeltaAccumulator = 0;
-              goToSection(0);
-            }
-          } else {
-            edgeDeltaAccumulator = 0;
-            // Free natural reading scroll upward
-          }
-        } else if (delta > 0) {
-          // Scrolling DOWN inside Section 1
-          const sec1Bottom = sections[1] ? sections[1].getBoundingClientRect().bottom : 0;
-          if (sec1Bottom <= window.innerHeight + 10) {
-            e.preventDefault();
-            edgeDeltaAccumulator += delta;
-            clearTimeout(edgeResetTimer);
-            edgeResetTimer = setTimeout(() => { edgeDeltaAccumulator = 0; }, 300);
-
-            if (edgeDeltaAccumulator >= 85 && !isTransitioning) {
-              edgeDeltaAccumulator = 0;
-              goToSection(2);
-            }
-          } else {
-            edgeDeltaAccumulator = 0;
-            // Free natural reading scroll downward
-          }
-        }
-        return;
-      }
-
-      if (currentIndex === 2) {
-        // Section 2 (Ecosistema, Capacidades & Footer)
-        if (delta < 0) {
-          // Scrolling UP inside Section 2
-          const sec2Top = sections[2] ? sections[2].getBoundingClientRect().top : 0;
-          if (sec2Top >= 65) {
-            e.preventDefault();
-            edgeDeltaAccumulator += delta;
-            clearTimeout(edgeResetTimer);
-            edgeResetTimer = setTimeout(() => { edgeDeltaAccumulator = 0; }, 300);
-
-            if (edgeDeltaAccumulator <= -75 && !isTransitioning) {
-              edgeDeltaAccumulator = 0;
-              goToSection(1);
-            }
-          } else {
-            edgeDeltaAccumulator = 0;
-            // Free natural browsing scroll upward
-          }
-        } else {
-          edgeDeltaAccumulator = 0;
-          // Free natural scroll down through all cards & footer
-        }
-        return;
-      }
-    }, { passive: false });
-
-    // Keyboard Navigation (ArrowUp/Down, PageUp/Down, Home)
-    window.addEventListener('keydown', (e) => {
-      if (window.innerWidth <= 768) return;
-      if (document.body.classList.contains('modal-open')) return;
-      if (document.activeElement && ['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement.tagName)) return;
-
-      if (e.key === 'ArrowDown' || e.key === 'PageDown') {
-        if (currentIndex === 0) {
-          e.preventDefault();
-          if (!isTransitioning) goToSection(1);
-        } else if (currentIndex === 1) {
-          const sec1Bottom = sections[1] ? sections[1].getBoundingClientRect().bottom : 0;
-          if (sec1Bottom <= window.innerHeight + 30) {
-            e.preventDefault();
-            if (!isTransitioning) goToSection(2);
-          }
-        }
-      } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {
-        if (currentIndex === 2) {
-          const sec2Top = sections[2] ? sections[2].getBoundingClientRect().top : 0;
-          if (sec2Top >= -25) {
-            e.preventDefault();
-            if (!isTransitioning) goToSection(1);
-          }
-        } else if (currentIndex === 1) {
-          const sec1Top = sections[1] ? sections[1].getBoundingClientRect().top : 0;
-          if (sec1Top >= -25) {
-            e.preventDefault();
-            if (!isTransitioning) goToSection(0);
-          }
-        }
-      } else if (e.key === 'Home') {
-        e.preventDefault();
-        goToSection(0);
-      }
-    });
-
-    // Touch Gestures for touchscreens
-    let touchStartY = 0;
-    let touchStartTime = 0;
-
-    window.addEventListener('touchstart', (e) => {
-      if (e.touches && e.touches.length > 0) {
-        touchStartY = e.touches[0].clientY;
-        touchStartTime = Date.now();
-      }
-    }, { passive: true });
-
-    window.addEventListener('touchend', (e) => {
-      if (window.innerWidth <= 768) return;
-      if (document.body.classList.contains('modal-open')) return;
-      if (document.activeElement && ['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement.tagName)) return;
-
-      if (e.changedTouches && e.changedTouches.length > 0) {
-        const touchEndY = e.changedTouches[0].clientY;
-        const diffY = touchStartY - touchEndY;
-        const elapsed = Date.now() - touchStartTime;
-
-        if (Math.abs(diffY) > 55 && elapsed < 700) {
-          if (diffY > 0 && !isTransitioning) {
-            // Swiping UP -> scrolling down
-            if (currentIndex === 0) {
-              goToSection(1);
-            } else if (currentIndex === 1) {
-              const sec1Bottom = sections[1] ? sections[1].getBoundingClientRect().bottom : 0;
-              if (sec1Bottom <= window.innerHeight + 30) {
-                goToSection(2);
-              }
-            }
-          } else if (diffY < 0 && !isTransitioning) {
-            // Swiping DOWN -> scrolling up
-            if (currentIndex === 2) {
-              const sec2Top = sections[2] ? sections[2].getBoundingClientRect().top : 0;
-              if (sec2Top >= -25) {
-                goToSection(1);
-              }
-            } else if (currentIndex === 1) {
-              const sec1Top = sections[1] ? sections[1].getBoundingClientRect().top : 0;
-              if (sec1Top >= -25) {
-                goToSection(0);
-              }
-            }
-          }
-        }
-      }
-    }, { passive: true });
-
-    // IntersectionObserver to synchronize section active state with scroll position
-    if ('IntersectionObserver' in window) {
-      const sectionObserver = new IntersectionObserver((entries) => {
-        if (isTransitioning) return;
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const idx = parseInt(entry.target.getAttribute('data-section-index'), 10);
-            if (!isNaN(idx) && idx !== currentIndex) {
-              currentIndex = idx;
-              updateSectionVisuals(idx);
-            }
-          }
-        });
-      }, {
-        threshold: 0.35
-      });
-
-      sections.forEach((sec) => sectionObserver.observe(sec));
-    }
+    window.addEventListener('scroll', updateActiveSectionOnScroll, { passive: true });
+    updateActiveSectionOnScroll();
 
     // Scroll reveal observer for elements with reveal classes inside sections
     const revealTargets = document.querySelectorAll('.reveal-on-scroll, .reveal-stagger-parent');
@@ -1578,7 +1371,7 @@ GalateaEmbeddedPay.startPayment({
     }
 
     // Expose global navigation method
-    window.galateaGoToSection = goToSection;
+    window.galateaGoToSection = scrollToSection;
   }
 
   // --- 12. Init ---
@@ -1588,7 +1381,7 @@ GalateaEmbeddedPay.startPayment({
     setupMatrixDragScroll();
     updateUI();
     initAmbientCanvas();
-    initSectionSnapController();
+    initSectionNavTracker();
   }
 
   document.addEventListener('DOMContentLoaded', init);

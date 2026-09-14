@@ -115,13 +115,11 @@
 
 html {
   scroll-behavior: smooth;
-  scroll-snap-type: y mandatory;
-  scroll-padding-top: 5.5rem;
+  scroll-padding-top: 4.5rem;
   font-family: var(--font-system);
   background-color: var(--apple-bg);
   color: var(--apple-text-primary);
   line-height: 1.47;
-  overflow-y: scroll;
 }
 
 body {
@@ -136,131 +134,43 @@ body {
 }
 
 /* ==========================================================================
-   Section Snap Architecture & Section Fade In/Out Transitions
+   Section Layout Architecture (Natural Free Scroll & Right Rail Tracker)
    ========================================================================== */
 .snap-section {
-  min-height: calc(100vh - 3.75rem);
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
-  scroll-snap-align: start;
-  scroll-snap-stop: always;
-  scroll-margin-top: 5.5rem;
+  scroll-margin-top: 4.5rem;
   position: relative;
-  padding: 2.5rem 0;
   width: 100%;
-  
-  /* Inactive section: recessed, blurred, and faded */
-  opacity: 0.05;
-  transform: scale(0.96) translateY(32px);
-  filter: blur(8px);
-  pointer-events: none;
-  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
-              transform 0.7s cubic-bezier(0.16, 1, 0.3, 1),
-              filter 0.7s cubic-bezier(0.16, 1, 0.3, 1);
-  will-change: opacity, transform, filter;
-}
-
-/* Active Section: vivid, sharp, fully interactive */
-.snap-section.is-active {
-  opacity: 1;
-  transform: scale(1) translateY(0);
-  filter: blur(0);
-  pointer-events: auto;
-}
-
-/* Passed Section: fades upward out of view */
-.snap-section.is-passed {
-  opacity: 0.05;
-  transform: scale(0.96) translateY(-32px);
-  filter: blur(8px);
-  pointer-events: none;
-}
-
-/* Section 1: Concepto & Trayectoria */
-.snap-section.concept-journey-section {
-  min-height: calc(100vh - 3.75rem);
-  height: auto;
-  justify-content: flex-start;
-  scroll-snap-stop: normal;
-  scroll-margin-top: 5.5rem;
-  padding-top: 4.5rem;
-  padding-bottom: 9rem; /* Generous breathing space so scroll doesn't trigger unexpectedly */
-  gap: 3.5rem;
-}
-
-/* Section 2: Ecosistema & Catálogo */
-.snap-section.ecosystem-catalog-section {
-  min-height: calc(100vh - 3.75rem);
-  height: auto;
-  justify-content: flex-start;
-  scroll-snap-stop: normal;
-  scroll-margin-top: 5.5rem;
-  padding-top: 4.5rem;
-  padding-bottom: 7rem;
-  gap: 3.5rem;
-}
-
-.snap-section.concept-journey-section.is-active,
-.snap-section.ecosystem-catalog-section.is-active {
   opacity: 1;
   transform: none;
   filter: none;
   pointer-events: auto;
 }
 
-/* Section Bottom Breathing Buffer & Transition Cue */
-.section-bottom-buffer {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-  padding: 3.5rem 0 1.5rem;
-  user-select: none;
+.snap-section.hero {
+  min-height: calc(100vh - 3.75rem);
+  justify-content: center;
+  padding: 2.5rem 0 2rem;
 }
 
-.buffer-line {
-  width: 140px;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--apple-border-strong), transparent);
+/* Section 1: Concepto & Trayectoria */
+.snap-section.concept-journey-section {
+  min-height: auto;
+  padding-top: 3.5rem;
+  padding-bottom: 5rem;
+  gap: 3.5rem;
 }
 
-.buffer-cue {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.65rem;
-  padding: 0.4rem 1.1rem;
-  border-radius: var(--radius-pill);
-  background: var(--apple-surface);
-  border: 1px solid var(--apple-border);
-  backdrop-filter: var(--apple-glass-blur);
-  -webkit-backdrop-filter: var(--apple-glass-blur);
-  font-size: 0.78rem;
-  font-weight: 500;
-  color: var(--apple-text-secondary);
-  box-shadow: var(--shadow-subtle);
-}
-
-.buffer-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--apple-blue);
-  box-shadow: 0 0 8px var(--apple-blue);
-}
-
-.buffer-arrow {
-  font-size: 0.85rem;
-  color: var(--apple-blue);
-  animation: bufferBounce 2s infinite ease-in-out;
-}
-
-@keyframes bufferBounce {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(4px); }
+/* Section 2: Ecosistema & Catálogo */
+.snap-section.ecosystem-catalog-section {
+  min-height: auto;
+  padding-top: 3.5rem;
+  padding-bottom: 4rem;
+  gap: 3.5rem;
 }
 
 .catalog-wrapper-section {
