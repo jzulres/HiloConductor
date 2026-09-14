@@ -1040,9 +1040,17 @@ GalateaEmbeddedPay.startPayment({
       });
     });
 
-    // Hero Action Buttons (Catalog & Matrix Fast Jump)
+    // Hero Action Buttons (Explainer, Catalog & Matrix Fast Jump)
+    const heroBtnExplainer = document.getElementById('heroBtnExplainer');
     const heroBtnCatalog = document.getElementById('heroBtnCatalog');
     const heroBtnMatrix = document.getElementById('heroBtnMatrix');
+
+    if (heroBtnExplainer) {
+      heroBtnExplainer.addEventListener('click', (e) => {
+        e.preventDefault();
+        document.getElementById('hiloExplainer')?.scrollIntoView({ behavior: 'smooth' });
+      });
+    }
 
     if (heroBtnCatalog) {
       heroBtnCatalog.addEventListener('click', () => {
@@ -1247,14 +1255,67 @@ GalateaEmbeddedPay.startPayment({
     renderWaves();
   }
 
-  // --- 11. Init ---
+  // --- 11. Scroll Reveal & Hero Scroll Cue ---
+  function initScrollReveal() {
+    const scrollCue = document.getElementById('heroScrollCue');
+
+    // Smooth scroll for hero scroll cue
+    if (scrollCue) {
+      scrollCue.addEventListener('click', (e) => {
+        e.preventDefault();
+        const target = document.getElementById('hiloExplainer');
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+
+      // Fade out cue when scrolled down
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 70) {
+          scrollCue.style.opacity = '0';
+          scrollCue.style.pointerEvents = 'none';
+          scrollCue.style.transform = 'translateY(8px)';
+        } else {
+          scrollCue.style.opacity = '';
+          scrollCue.style.pointerEvents = '';
+          scrollCue.style.transform = '';
+        }
+      }, { passive: true });
+    }
+
+    // Scroll reveal observer for content fade & rise as user scrolls
+    const revealTargets = document.querySelectorAll('.reveal-on-scroll, .reveal-stagger-parent');
+    if (!('IntersectionObserver' in window)) {
+      revealTargets.forEach((el) => el.classList.add('is-revealed'));
+      return;
+    }
+
+    const revealObserver = new IntersectionObserver((entries, observer) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-revealed');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, {
+      root: null,
+      rootMargin: '0px 0px -40px 0px',
+      threshold: 0.08
+    });
+
+    revealTargets.forEach((el) => revealObserver.observe(el));
+  }
+
+  // --- 12. Init ---
   function init() {
     elements.totalCapsCount.textContent = `${CAPABILITIES.length} capacidades`;
     setupEventListeners();
     setupMatrixDragScroll();
     updateUI();
     initAmbientCanvas();
+    initScrollReveal();
   }
 
   document.addEventListener('DOMContentLoaded', init);
 })();
+
